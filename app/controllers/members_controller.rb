@@ -7,8 +7,11 @@ class MembersController < ApplicationController
 
   def create
     Member.transaction do
-      @member = Member.create(params.require(:member).permit(:name, :password))
-      @member.links << Link.from_url(@member, params.require(:member)[:website_address])
+      filtered_params = params.require(:member).permit(:name, :password, :website_address)
+      @member = Member.create(filtered_params)
+      web_addr = filtered_params[:website_address]
+      @member.links << Link.from_url(@member, web_addr)
+      Topic.create_member_topics(@member, web_addr)
     end
     session[:member_id] = @member.id
     redirect_to '/welcome'

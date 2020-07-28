@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_203756) do
+ActiveRecord::Schema.define(version: 2020_07_28_212515) do
 
   create_table "links", force: :cascade do |t|
     t.string "url"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 2020_07_28_203756) do
     t.index ["member_id"], name: "index_links_on_member_id"
   end
 
+  create_table "member_topics", force: :cascade do |t|
+    t.integer "member_id"
+    t.integer "topic_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_id"], name: "index_member_topics_on_member_id"
+    t.index ["topic_id"], name: "index_member_topics_on_topic_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.string "password_digest"
     t.string "website_address"
@@ -28,6 +37,12 @@ ActiveRecord::Schema.define(version: 2020_07_28_203756) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end
