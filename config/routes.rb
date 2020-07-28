@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'l/:id' => 'links#show'
   resources :members, only: [:new, :create, :show, :index]
 
   get 'login', to: 'sessions#new'

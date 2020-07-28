@@ -10,15 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_194226) do
+ActiveRecord::Schema.define(version: 2020_07_28_203756) do
+
+  create_table "links", force: :cascade do |t|
+    t.string "url"
+    t.string "code"
+    t.integer "member_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_id"], name: "index_links_on_member_id"
+  end
 
   create_table "members", force: :cascade do |t|
-    t.string "email"
     t.string "password_digest"
     t.string "website_address"
     t.string "website_short_address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
   end
 
 end
