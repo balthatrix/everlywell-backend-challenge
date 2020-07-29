@@ -19,7 +19,8 @@
   <p>
   <h2> Check out my site(s) here: </h2>
   <% @member.links.find_each do |link| %>
-    <%= link_to link.url, link.short_url %>
+    <p>Long Url -- <%= link_to link.url, link.url, target: "_new" %></p>
+    <p> Short Url -- <%= link_to link.short_url, link.short_url, target: "_new" %> </p>
   <% end%>
   </p>
 <% end %>
