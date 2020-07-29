@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_212515) do
+ActiveRecord::Schema.define(version: 2020_07_29_034740) do
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "member_a_id", null: false
+    t.integer "member_b_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_a_id"], name: "index_friendships_on_member_a_id"
+    t.index ["member_b_id"], name: "index_friendships_on_member_b_id"
+  end
 
   create_table "links", force: :cascade do |t|
     t.string "url"
@@ -45,4 +54,6 @@ ActiveRecord::Schema.define(version: 2020_07_28_212515) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "friendships", "members", column: "member_a_id"
+  add_foreign_key "friendships", "members", column: "member_b_id"
 end

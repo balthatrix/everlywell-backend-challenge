@@ -1,0 +1,43 @@
+<%= link_to '< Back to All Members', '/welcome' %>
+
+<% if @member != current_member %>
+  <h1> Hi, I'm <%= @member.name %> </h1>
+<% else %>
+  <h1> This is your profile </h1>
+<% end %>
+
+<% if @member.topics.size > 0 %>
+  <h2> I like to write about these topics... </h2>
+  <% @member.topics.find_each do |topic| %>
+    <p><%= topic.name %></p>
+  <% end %>
+<% end %>
+
+<% if @member.links.size > 0 %>
+  <h2> Check out my site(s) here: </h2>
+  <% @member.links.find_each do |link| %>
+    <%= link_to link.url, link.short_url %>
+  <% end%>
+<% end %>
+
+<% if @member.friends.size > 0 %>
+  <h2> Meet my Friend(s) </h2>
+  <%= @member.friends.find_each do |friend| %>
+    <%= link_to friend.name, member_path(friend) %>
+  <% end %>
+<% else %>
+  <h2> I have 0 Friends. Will you be my friend? </h2>
+<% end %>
+
+
+<% if @member != current_member %>
+  <% if @member.friends.exists?(id: current_member.id) %>
+    <p> You are currently friends </p>
+  <%else%>
+    <br/>
+    <%= form_tag '/friendships' do %>
+      <%= hidden_field_tag :member_b_id, @member.id %>
+      <%= submit_tag "Add Me As a Friend" %>
+    <%end%>
+  <% end %>
+<% end %> 

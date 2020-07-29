@@ -2,7 +2,46 @@
 
 <% if logged_in? %>
   <h1>You are Logged In, <%= current_member.name %></h1>
+  <%= button_to "Log Out", '/logout', method: :delete %>
+
+  <h3>All Members</h3>
+  <table>
+    <thead>
+      <tr>
+        <td>
+          Name
+        </td>
+        <td>
+          Website
+        </td>
+        <td>
+          # Of Friends
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <% Member.find_each do |m| %>
+        <tr>
+          <td> 
+            <%= link_to m.name, member_path(m) %>
+          </td>
+          <td>
+            <% if m.links.size > 0 %>
+              <a href='<%= m.links.first.short_url %>' target='_blank'>
+                <%= m.links.first.code %>
+              </a>
+            <% else %>
+              n/a
+            <% end %>
+          </td>
+          <td><%= m.friends.size %> </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h3>Please log in or sign up</h3>
+  <%= button_to "Login", '/login', method: :get%>
+  <%= button_to "Sign Up", '/members/new', method: :get %>
 <%end%>
 
-<%= button_to "Login", '/login', method: :get%>
-<%= button_to "Sign Up", '/members/new', method: :get%>
