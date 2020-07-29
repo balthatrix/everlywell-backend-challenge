@@ -1,6 +1,6 @@
 # README
 
-Setup:
+Setup (Mac):
 - Clone this repo
 - cd into the repo's root directory
 - run `yarn`
