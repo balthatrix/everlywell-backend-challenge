@@ -15,6 +15,8 @@ Bugs:
 
 Optimizations needed:
 - The search really should be performed in a background job or lambda
+- The search is currently exaustive; it doesn't terminate when the running path is longer than a solution that's already found
+- The search could cause memory spikes. It allocates memory with each invocation
 - The web scraping also really needs to be in a background job; certain web pages time out the request
 
 UI/UX oddities:
