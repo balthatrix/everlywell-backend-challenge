@@ -2,6 +2,10 @@ class Topic < ApplicationRecord
   has_many :member_topics
   has_many :members, through: :member_topics
 
+  scope :search, -> (text) {
+    where("topics.name LIKE ?", "%#{text}%")
+  }
+
   # creates topics from h1, h2, and h3 tags
   # this should definitely be in a background or some kind of worker process asap
   # this should also have some hardening/validation for proper web address probably

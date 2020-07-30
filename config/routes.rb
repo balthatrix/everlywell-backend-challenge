@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get 'l/:id' => 'links#show'
-  resources :members, only: [:new, :create, :show, :index]
+  resources :members, only: [:new, :create, :show, :index] do
+    get 'search', on: :member
+  end
 
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'

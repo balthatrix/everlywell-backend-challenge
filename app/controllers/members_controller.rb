@@ -17,7 +17,25 @@ class MembersController < ApplicationController
     redirect_to '/welcome'
   end
 
+  def search
+    redirect_to "/members/#{params[:id]}?search=#{URI.encode(params[:search])}"
+  end
+
   def show
     @member = Member.find(params[:id])
+
+    @search = params[:search]
+
+    unless @search.blank?
+      # this assumes one topic
+      @matching_topic = Topic.search(@search).last
+
+      if @matching_topic
+        # this assumes the first member/owner of the topic
+        @expert_member = @matching_topic.members.first
+
+        @shortest_path_to_expert = Friendship.shortest_path(@member, @expert_member)
+      end
+    end
   end
 end

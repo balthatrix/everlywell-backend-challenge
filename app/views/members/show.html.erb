@@ -3,41 +3,100 @@
 <% if @member != current_member %>
   <h1> Hi, I'm <%= @member.name %> </h1>
 <% else %>
-  <h1> This is your profile </h1>
+  <h1> This is your profile, <%= @member.name %> </h1>
 <% end %>
 
 <% if @member.topics.size > 0 %>
+  <p>
   <h2> I like to write about these topics... </h2>
   <% @member.topics.find_each do |topic| %>
-    <p><%= topic.name %></p>
+    <p><%= raw topic.name %></p>
   <% end %>
+  </p>
 <% end %>
 
 <% if @member.links.size > 0 %>
+  <p>
   <h2> Check out my site(s) here: </h2>
   <% @member.links.find_each do |link| %>
-    <%= link_to link.url, link.short_url %>
+    <p>Long Url -- <%= link_to link.url, link.url, target: "_new" %></p>
+    <p> Short Url -- <%= link_to link.short_url, link.short_url, target: "_new" %> </p>
   <% end%>
+  </p>
 <% end %>
 
 <% if @member.friends.size > 0 %>
+  <p>
   <h2> Meet my Friend(s) </h2>
   <%= @member.friends.find_each do |friend| %>
     <%= link_to friend.name, member_path(friend) %>
   <% end %>
+  </p>
 <% else %>
+  <p>
   <h2> I have 0 Friends. Will you be my friend? </h2>
+  </p>
 <% end %>
 
-
 <% if @member != current_member %>
+  <p>
   <% if @member.friends.exists?(id: current_member.id) %>
     <p> You are currently friends </p>
-  <%else%>
+  <% else %>
     <br/>
     <%= form_tag '/friendships' do %>
       <%= hidden_field_tag :member_b_id, @member.id %>
       <%= submit_tag "Add Me As a Friend" %>
-    <%end%>
+    <% end %>
   <% end %>
+  </p>
 <% end %> 
+
+<%= form_with url: "/members/#{@member.id}/search", method: :get do %>
+  <%= label_tag :search_friends_by_topic %>
+  <%= text_field_tag :search, @search, id: "search_field" %>
+  <%= button_tag "Search", id: "search_submit" %>
+<% end %>
+
+<% unless @search.blank? %>
+  <p>
+  <h2> Topic-based friend search for '<%= @search %>' </h2>
+  <% if @matching_topic %> 
+    <% if @shortest_path_to_expert %>
+      <% @shortest_path_to_expert.each_with_index do |mem,i| %>
+        <% if i == 0 %>
+          <%= mem.name %>
+        <% else %>
+          <%= link_to(mem.name, member_path(mem)) %>
+        <% end %>
+        <% if i < @shortest_path_to_expert.size - 1 %>
+          >
+        <% end %>
+      <% end%>
+    <% else %>
+      <p>We found this expert, but there are no connections with them:
+      <%= link_to(@expert_member.name, member_path(@expert_member)) %></p>
+    <% end %>
+
+    Matching topic: <%= raw @matching_topic.name %>
+  </p>
+<% else %>
+  <p> Unable to find topics matching this search </p>
+<% end %>
+<% end %>
+
+<script>
+var setup = () => {
+  var inputField = document.getElementById("search_field");
+  var searchSubmit = document.getElementById("search_submit");
+  var search
+  inputField.onchange = function() {
+  search = inputField.value
+}
+
+  searchSubmit.onclick = function() {
+  window.location = `${window.location.origin}${window.location.pathname}?search=${search}`
+}
+}
+  setup()
+</script>
